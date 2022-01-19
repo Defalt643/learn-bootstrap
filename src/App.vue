@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <b-button>Test 1</b-button>
     <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link>
