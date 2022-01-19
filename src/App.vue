@@ -2,15 +2,15 @@
   <div id="app">
     <b-container fluid>
       <b-row>
-        <b-col cols="2" class="app-menu min-vh-100"><Menu /></b-col>
+        <b-col cols="2" class="app-menu min-vh-100"><Menu/></b-col>
         <b-col cols="10">
           <b-container>
             <b-row>
               <b-col>
-                <Navbar />
+                <NavBar/>
               </b-col>
             </b-row>
-            <b-row>
+            <b-row class="text-justify">
               <b-col><router-view /></b-col>
             </b-row>
           </b-container>
@@ -20,11 +20,11 @@
   </div>
 </template>
 <script>
-import Navbar from './components/Navbar.vue'
+import NavBar from './components/NavBar.vue'
 import Menu from './components/Menu.vue'
 export default {
   components: {
-    Navbar,
+    NavBar,
     Menu
   }
 }

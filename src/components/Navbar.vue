@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-navbar>
-      <b-navbar-brand href="#">MyApp</b-navbar-brand>
+      <b-navbar-brand href="#">My App</b-navbar-brand>
 
       <!-- Right aligned nav items -->
       <b-navbar-nav class="ml-auto">
