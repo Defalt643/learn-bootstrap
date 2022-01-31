@@ -52,6 +52,12 @@
       <b-nav-item class="sub-menu" v-if="showCrudExample" to="./datatable1"
         >Data table 1</b-nav-item
       >
+      <b-nav-item class="sub-menu" v-if="showCrudExample" to="./productform1"
+        >Product Form 1</b-nav-item
+      >
+      <b-nav-item class="sub-menu" v-if="showCrudExample" to="./productTable"
+        >Product Table</b-nav-item
+      >
     </b-nav>
   </div>
 </template>
