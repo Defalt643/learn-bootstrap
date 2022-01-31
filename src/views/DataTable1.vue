@@ -2,8 +2,23 @@
   <div>
     <b-container fluid>
       <b-row>
+        <b-col class="text-right">
+          <b-button variant="primary" @click="addNew">เพิ่มใหม่</b-button>
+        </b-col>
+      </b-row>
+      <b-row>
         <b-col>
-          <b-table :items="productItems" :fields="fields"> </b-table>
+          <b-table :items="productItems" :fields="fields">
+            <template #cell(operators)="{ item }">
+              <b-button @click="editProduct(item)">แก้ไข</b-button
+              ><b-button
+                class="m1-1"
+                variant="danger"
+                @click="deleteProduct(item)"
+                >ลบ</b-button
+              >
+            </template>
+          </b-table>
         </b-col>
       </b-row>
     </b-container>
@@ -11,12 +26,18 @@
 </template>
 <script>
 export default {
+  methods: {
+    editProduct (item) {},
+    deleteProduct (item) {},
+    addNew () {}
+  },
   data () {
     return {
       fields: [
         { key: 'productId', label: 'ไอดี' },
         { key: 'name', label: 'ชื่อสินค้า' },
-        { key: 'price', label: 'ราคา' }
+        { key: 'price', label: 'ราคา' },
+        { key: 'operators', label: 'กระบวนการ' }
       ],
       productItems: [
         { productId: 1, name: 'Ipad gen1 64G Wifi', price: 11000.0 },
