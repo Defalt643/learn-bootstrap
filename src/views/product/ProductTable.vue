@@ -34,24 +34,44 @@
 </template>
 <script>
 import ProductForm from './ProductForm.vue'
+import axios from 'axios'
 export default {
   components: {
     ProductForm
   },
 
   methods: {
+    makeToast (title, message, variant = 'sucess', append = false) {
+      this.toastCount++
+      this.$bvToast.toast(message, {
+        title: title,
+        variant: variant,
+        autoHideDelay: 3000,
+        appendToast: append
+      })
+    },
     saveProduct (product) {
       console.log('Submit', product)
       if (product.id < 0) {
-        product.id = this.productId
-        this.productItems.push(product)
-        this.productId++
-      } else {
-        const index = this.productItems.findIndex((item) => {
-          return product.id === item.id
+        axios.post('http://localhost:3000/products', product).then(
+          function (response) {
+            const newProduct = response.data
+            this.getProducts()
+            this.makeToast('เพิ่มสำเร็จ', 'สินค้า ' + newProduct + ' ถูกเพิ่มแล้ว')
+          }.bind(this)
+        ).catch(() => {
+          this.makeToast('เพิ่มไม่สำเร็จ', 'ไม่สามารถเพิ่มได้ ' + product.id, 'danger')
         })
-        // this.productItem[index] = product
-        this.productItems.splice(index, 1, product)
+      } else {
+        axios.put('http://localhost:3000/products/' + product.id, product).then(
+          function (response) {
+            const updateProduct = response.data
+            this.getProducts()
+            this.makeToast('ปรับปรุง', 'สินค้า ' + updateProduct + ' ถูกแก้ไขแล้ว')
+          }.bind(this)
+        ).catch(() => {
+          this.makeToast('ปรับปรุงไม่สำเร็จ', 'ไม่สามารถปรับปรุงได้ ' + product.id, 'danger')
+        })
       }
     },
     editProduct (item) {
@@ -62,11 +82,24 @@ export default {
     },
     deleteProduct (product) {
       if (confirm(`คุณต้องการจะลบสินค้า ${product.id} หรือไม่`)) {
-        const index = this.productItems.findIndex((item) => {
-          return product.id === item.id
+        axios.delete('http://localhost:3000/products/' + product.id).then(
+          function (response) {
+            const deleteProduct = response.data
+            this.getProducts()
+            this.makeToast('ลบสำเร็จ', 'สินค้า ' + deleteProduct + ' ถูกลบแล้ว')
+          }.bind(this)
+        ).catch(() => {
+          this.makeToast('ลบไม่สำเร็จ', 'ไม่สามารถลบ ' + product.id, 'danger')
         })
-        this.productItems.splice(index, 1)
       }
+    },
+    getProducts () {
+      const salf = this
+      axios.get('http://localhost:3000/products').then((response) => {
+        console.log(response)
+        salf.productItems = response.data
+      }
+      )
     }
   },
   data () {
@@ -78,20 +111,13 @@ export default {
         { key: 'operators', label: 'กระบวนการ' }
       ],
       productItems: [
-        { id: 1, name: 'Ipad gen1 64G Wifi', price: 11000.0 },
-        { id: 2, name: 'Ipad gen2 64G Wifi', price: 12000.0 },
-        { id: 3, name: 'Ipad gen3 64G Wifi', price: 13000.0 },
-        { id: 4, name: 'Ipad gen4 64G Wifi', price: 14000.0 },
-        { id: 5, name: 'Ipad gen5 64G Wifi', price: 15000.0 },
-        { id: 6, name: 'Ipad gen6 64G Wifi', price: 16000.0 },
-        { id: 7, name: 'Ipad gen7 64G Wifi', price: 17000.0 },
-        { id: 8, name: 'Ipad gen8 64G Wifi', price: 18000.0 },
-        { id: 9, name: 'Ipad gen9 64G Wifi', price: 19000.0 },
-        { id: 10, name: 'Ipad gen10 64G Wifi', price: 20000.0 }
       ],
-      productId: 11,
+
       selectedItem: null
     }
+  },
+  mounted () {
+    this.getProducts()
   }
 }
 </script>
